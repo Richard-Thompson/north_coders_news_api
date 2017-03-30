@@ -2,6 +2,7 @@ const topics = require('../models/topics');
 const articles = require('../models/articles');
 const comments = require('../models/comments');
 
+
 function getAllTopics (req, res) {
     topics.find({}, function (err, topics) {
         if (err) {
@@ -29,9 +30,16 @@ function getAllArticles (req, res, next) {
 
 function getArticleComments (req, res, next) {
     comments.find({belongs_to:req.params.article_id}, function (err, comments) {
-        console.log(req.params.article_id);
         if (err) return next(err);
         res.status(200).send({comments:comments});
+    });
+}
+
+function addArticleComment (req, res, next) {
+    let comment = new comments({belongs_to: req.params.article_id, body:req.body.comment});
+     comment.save(function (err, comments) {
+        if (err) return next(err);
+        res.status(200).send({belongs_to:req.params.article_id, body:req.body});
     });
 }
 
@@ -39,5 +47,6 @@ module.exports = {
     getAllTopics:getAllTopics,
     getTopicArticles:getTopicArticles,
     getAllArticles:getAllArticles,
-    getArticleComments:getArticleComments
+    getArticleComments:getArticleComments,
+    addArticleComment:addArticleComment
 };
