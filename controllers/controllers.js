@@ -1,4 +1,5 @@
 const topics = require('../models/topics');
+const articles = require('../models/articles');
 
 function getAllTopics (req, res) {
     topics.find({}, function (err, topics) {
@@ -10,6 +11,15 @@ function getAllTopics (req, res) {
 
 }
 
-module.exports = {
-    getAllTopics:getAllTopics
+function getTopicArticles (req, res, next) {
+    articles.find({belongs_to: req.params.topic_id}, function (err, topics) {
+        if (err) next(err);
+        res.status({topics:topics});
+    });
+
 }
+
+module.exports = {
+    getAllTopics:getAllTopics,
+    getTopicArticles:getTopicArticles
+};

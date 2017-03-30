@@ -18,6 +18,7 @@ mongoose.connect(db, function (err) {
 });
 
 app.use(bodyParser.json());
+
 app.use('/api',apiRouter);
 
 app.use('/*',function (req, res) {
@@ -26,4 +27,18 @@ app.use('/*',function (req, res) {
 
 app.listen(PORT, function () {
   console.log(`listening on port ${PORT}`);
+});
+
+app.use(function (err, req, response, next) {
+    if (err.name === 'CastError') {
+        return response.status(400).send({
+            reason: `No id ${err.value} found`,
+            stack_trace: err
+        });
+   }
+   return next(err);
+});
+
+app.use(function (err, req, res) {
+    return res.status(500).send({error: err});
 });

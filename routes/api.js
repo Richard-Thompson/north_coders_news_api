@@ -13,4 +13,6 @@ router.route('/').get(function (req, res) {
 
 router.route('/topics').get(controllers.getAllTopics);
 
+router.route('/topics/:topic_id').get(controllers.getTopicArticles);
+
 module.exports = router;
