@@ -12,9 +12,9 @@ function getAllTopics (req, res) {
 }
 
 function getTopicArticles (req, res, next) {
-    articles.find({belongs_to: req.params.topic_id}, function (err, topics) {
+    articles.find({belongs_to: req.params.topic_id}, function (err, articles) {
         if (err) next(err);
-        res.status({topics:topics});
+        res.status(200).send({articles:articles});
     });
 
 }
