@@ -19,7 +19,15 @@ function getTopicArticles (req, res, next) {
 
 }
 
+function getAllArticles (req, res, next) {
+    articles.find({}, function (err, articles) {
+        if (err) next(err);
+        res.status(200).send({articles:articles});
+    });
+}
+
 module.exports = {
     getAllTopics:getAllTopics,
-    getTopicArticles:getTopicArticles
+    getTopicArticles:getTopicArticles,
+    getAllArticles:getAllArticles
 };
