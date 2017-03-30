@@ -13,9 +13,10 @@ router.route('/').get(function (req, res) {
 
 router.route('/topics').get(controllers.getAllTopics);
 
-router.route('/topics/articles').get(controllers.getAllArticles);
+router.route('/articles').get(controllers.getAllArticles);
 
 router.route('/topics/:topic_id').get(controllers.getTopicArticles);
 
+router.route('/articles/:article_id/comments').get(controllers.getArticleComments);
 
 module.exports = router;
