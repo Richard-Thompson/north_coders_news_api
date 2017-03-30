@@ -1,12 +1,13 @@
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'dev';
 
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var app = express();
-var config = require('./config');
-var db = config.DB[process.env.NODE_ENV] || process.env.DB;
-var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const app = express();
+const config = require('./config');
+const db = config.DB[process.env.NODE_ENV] || process.env.DB;
+const PORT = 3001;
+const apiRouter = require('./routes/api');
 
 mongoose.connect(db, function (err) {
   if (!err) {
@@ -17,7 +18,11 @@ mongoose.connect(db, function (err) {
 });
 
 app.use(bodyParser.json());
-app.use('/api', function () {});
+app.use('/api',apiRouter);
+
+app.use('/*',function (req, res) {
+  res.status(404).send({status:'404 NOT FOUND'});
+});
 
 app.listen(PORT, function () {
   console.log(`listening on port ${PORT}`);
