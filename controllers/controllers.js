@@ -77,11 +77,22 @@ function upVoteDownVote (req, res, next) {
     });
 }
 
+function removeComment (req, res, next){
+    let id = mongoose.Types.ObjectId(req.params.comment_id);
+    
+    comments.remove({_id:id}, function (err) {
+        if(err) return next(err);
+
+        res.status(204);
+    })
+}
+
 module.exports = {
     getAllTopics:getAllTopics,
     getTopicArticles:getTopicArticles,
     getAllArticles:getAllArticles,
     getArticleComments:getArticleComments,
     addArticleComment:addArticleComment,
-    upVoteDownVote:upVoteDownVote
+    upVoteDownVote:upVoteDownVote,
+    removeComment:removeComment
 };
