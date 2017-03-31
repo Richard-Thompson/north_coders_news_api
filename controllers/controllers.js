@@ -2,7 +2,7 @@ const topics = require('../models/topics');
 const articles = require('../models/articles');
 const comments = require('../models/comments');
 const mongoose = require('mongoose');
-
+const async = require('async');
 
 function getAllTopics (req, res) {
     topics.find({}, function (err, topics) {
@@ -23,11 +23,34 @@ function getTopicArticles (req, res, next) {
 }
 
 function getAllArticles (req, res, next) {
-    articles.find({}, function (err, articles) {
-        if (err) next(err);
-        res.status(200).send({articles:articles});
+    async.waterfall([
+        function (next) {
+            articles.find({},function (err, articles){
+                if (err) return next(err);
+                next(null, articles);
+            });
+        },
+        function (articles, done) {
+            async.map(articles,function (article, next) {
+                comments.count({belongs_to:article._id}, function (err, count) {
+                    if (err) return done(err);
+                    article = article.toObject();
+                    article.comments_count = count;
+                    next(null, article);
+                }); 
+            
+            },done);
+        },
+            console.log('hello')
+        
+    ],function (err, result) {
+        if (err) return next(err);
+
+        res.status(200).send({articles:result})
+
     });
 }
+   
 
 function getArticleComments (req, res, next) {
     comments.find({belongs_to:req.params.article_id}, function (err, comments) {
