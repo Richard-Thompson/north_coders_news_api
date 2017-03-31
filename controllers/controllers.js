@@ -1,6 +1,7 @@
 const topics = require('../models/topics');
 const articles = require('../models/articles');
 const comments = require('../models/comments');
+const mongoose = require('mongoose');
 
 
 function getAllTopics (req, res) {
@@ -37,9 +38,20 @@ function getArticleComments (req, res, next) {
 
 function addArticleComment (req, res, next) {
     let comment = new comments({belongs_to: req.params.article_id, body:req.body.comment});
-     comment.save(function (err, comments) {
+     comment.save(function (err) {
         if (err) return next(err);
-        res.status(200).send({belongs_to:req.params.article_id, body:req.body});
+        res.status(201).send({belongs_to:req.params.article_id, body:req.body});
+    });
+}
+
+function upVoteDownVote (req, res, next) {
+    let id = mongoose.Types.ObjectId(req.params.article_id), vote = req.query.vote, voteIncrement = 0;
+    if (vote === 'up') voteIncrement = 1;
+    if (vote === 'down') voteIncrement = -1;
+    articles.update({_id:id},{$inc:{votes: voteIncrement}}, function (err) {
+        if (err) return next(err);
+
+        res.status(200).send({votes: vote});
     });
 }
 
@@ -48,5 +60,6 @@ module.exports = {
     getTopicArticles:getTopicArticles,
     getAllArticles:getAllArticles,
     getArticleComments:getArticleComments,
-    addArticleComment:addArticleComment
+    addArticleComment:addArticleComment,
+    upVoteDownVote:upVoteDownVote
 };
