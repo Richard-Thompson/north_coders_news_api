@@ -39,9 +39,8 @@ function getAllArticles (req, res, next) {
                     next(null, article);
                 }); 
             
-            },done);
+            }, done);
         },
-            console.log('hello')
         
     ],function (err, result) {
         if (err) return next(err);
