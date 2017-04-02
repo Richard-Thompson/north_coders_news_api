@@ -28,4 +28,6 @@ router.route('/articles/:article_id').put(controllers.upVoteDownVote);
 
 router.route('/comments/:comment_id').delete(controllers.removeComment);
 
+// router.route('/users/:username').get(controllers.getProfile);
+
 module.exports = router;

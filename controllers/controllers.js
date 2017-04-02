@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 const async = require('async');
 
 function getAllTopics (req, res) {
+    console.log(res.body);
     topics.find({}, function (err, topics) {
+        console.log(topics);
         if (err) {
             return res.status(500).send({error:err});
         }

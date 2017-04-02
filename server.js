@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const config = require('./config');
-const db = config.DB[process.env.NODE_ENV] || process.env.DB;
-const PORT = 3001;
+var db = config.DB[process.env.NODE_ENV] || process.env.DB;
+var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
 const apiRouter = require('./routes/api');
 
 mongoose.connect(db, function (err) {
