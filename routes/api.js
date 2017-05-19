@@ -24,7 +24,9 @@ bodyParser.json();
 
 router.route('/articles/:article_id/comments').post(controllers.addArticleComment);
 
-router.route('/articles/:article_id').put(controllers.upVoteDownVote);
+router.route('/articles/:article_id').put(controllers.articleVote);
+
+router.route('/comments/:comment_id').put(controllers.commentVote)
 
 router.route('/comments/:comment_id').delete(controllers.removeComment);
 

@@ -5,9 +5,7 @@ const mongoose = require('mongoose');
 const async = require('async');
 
 function getAllTopics (req, res) {
-    console.log(res.body);
     topics.find({}, function (err, topics) {
-        console.log(topics);
         if (err) {
             return res.status(500).send({error:err});
         }
@@ -27,7 +25,7 @@ function getTopicArticles (req, res, next) {
 function getAllArticles (req, res, next) {
     async.waterfall([
         function (next) {
-            articles.find({},function (err, articles){
+            articles.find({},function (err, articles) {
                 if (err) return next(err);
                 next(null, articles);
             });
@@ -47,7 +45,7 @@ function getAllArticles (req, res, next) {
     ],function (err, result) {
         if (err) return next(err);
 
-        res.status(200).send({articles:result})
+        res.status(200).send({articles:result});
 
     });
 }
@@ -68,25 +66,36 @@ function addArticleComment (req, res, next) {
     });
 }
 
-function upVoteDownVote (req, res, next) {
+function articleVote (req, res, next) {
     let id = mongoose.Types.ObjectId(req.params.article_id), vote = req.query.vote, voteIncrement = 0;
     if (vote === 'up') voteIncrement = 1;
     if (vote === 'down') voteIncrement = -1;
     articles.update({_id:id},{$inc:{votes: voteIncrement}}, function (err) {
         if (err) return next(err);
 
-        res.status(200).send({votes: vote});
+        res.status(201).send({votes: vote});
     });
 }
 
-function removeComment (req, res, next){
+function removeComment (req, res, next) {
     let id = mongoose.Types.ObjectId(req.params.comment_id);
     
     comments.remove({_id:id}, function (err) {
-        if(err) return next(err);
+        if (err) return next(err);
 
         res.status(204);
-    })
+    });
+}
+
+function commentVote (req, res, next) {
+    let id = mongoose.Types.ObjectId(req.params.comment_id), vote = req.query.vote, voteIncrement = 0;
+    if (vote === 'up') voteIncrement = 1;
+    if (vote === 'down') voteIncrement = -1;
+    comments.update({_id:id},{$inc:{votes: voteIncrement}}, function (err) {
+        if (err) return next(err);
+
+        res.status(201).send({votes: vote});
+    });
 }
 
 module.exports = {
@@ -95,6 +104,7 @@ module.exports = {
     getAllArticles:getAllArticles,
     getArticleComments:getArticleComments,
     addArticleComment:addArticleComment,
-    upVoteDownVote:upVoteDownVote,
-    removeComment:removeComment
+    articleVote:articleVote,
+    removeComment:removeComment,
+    commentVote: commentVote
 };
