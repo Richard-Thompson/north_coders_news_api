@@ -7,7 +7,7 @@ const app = express();
 const cors = require('cors');
 const config = require('./config');
 var db = config.DB[process.env.NODE_ENV] || process.env.DB;
-var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
+var PORT = config.PORT[process.env.NODE_ENV];
 const apiRouter = require('./routes/api');
 
 mongoose.connect(db, function (err) {
