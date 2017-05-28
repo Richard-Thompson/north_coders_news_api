@@ -57,19 +57,6 @@ describe('API ROUTES', () => {
                 });
         });
     });
-    describe('GET /api/', () => {
-        it('should return the status is ok', (done) => {
-            request(ROOT)
-                .get('/')
-                .end((err, res) => {
-                    if (err) throw err;
-                    expect(res.statusCode).to.equal(200);
-                    expect(res.body.status).to.equal('OK');
-
-                    done();
-                });
-        });
-    });
     describe('GET /api/topics', () => {
         it('should return the status is ok and contain topic titles', (done) => {
             request(ROOT)
@@ -99,6 +86,22 @@ describe('API ROUTES', () => {
                 });
         });
     });
+
+    describe('GET /api/articles/:aritcle_id', () =>{
+        it('should return status 200 and return 1 article', (done) => {
+            request(ROOT)
+                .get(`/articles/${sampleIds.article_id}`)
+                .end((err, res) => {
+                    console.log(res.body)
+                    console.log(res.body[0])
+                    if (err) throw err;
+                    expect(res.statusCode).to.equal(200);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body[0].belongs_to).to.equal('cats');
+                    done();
+                })
+        })
+    })
      describe('GET /api/topics/:topic_id', () => {
         it('should return the status is ok return all articles for the article id', (done) => {
             request(ROOT)

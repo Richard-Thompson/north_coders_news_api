@@ -5,9 +5,6 @@ const controllers = require('../controllers/controllers');
 const topics = require('../models/topics.js');
 const bodyParser = require('body-parser');
 
-mongoose.connect('mongodb://localhost/northcoders-news-api');
-
-
 router.route('/').get(function (req, res) {
     res.status(200).send({status:'OK'});
 });
@@ -16,11 +13,11 @@ router.route('/topics').get(controllers.getAllTopics);
 
 router.route('/articles').get(controllers.getAllArticles);
 
+router.route('/articles/:article_id').get(controllers.getArticle);
+
 router.route('/topics/:topic_id').get(controllers.getTopicArticles);
 
 router.route('/articles/:article_id/comments').get(controllers.getArticleComments);
-
-bodyParser.json();
 
 router.route('/articles/:article_id/comments').post(controllers.addArticleComment);
 

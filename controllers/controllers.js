@@ -49,6 +49,14 @@ function getAllArticles (req, res, next) {
 
     });
 }
+
+function getArticle (req, res, next) {
+    let id = mongoose.Types.ObjectId(req.params.article_id);
+    articles.find({_id:id}, function (err, article) {
+       if (err) next(err);
+        res.status(200).send(article);
+    });
+}
    
 
 function getArticleComments (req, res, next) {
@@ -106,5 +114,6 @@ module.exports = {
     addArticleComment:addArticleComment,
     articleVote:articleVote,
     removeComment:removeComment,
-    commentVote: commentVote
+    commentVote: commentVote,
+    getArticle:getArticle
 };
