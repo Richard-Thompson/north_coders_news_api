@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors');
 const config = require('./config');
 var db = config.DB[process.env.NODE_ENV] || process.env.DB;
 var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
@@ -16,6 +17,8 @@ mongoose.connect(db, function (err) {
     console.log(`error connecting to the Database ${err}`);
   }
 });
+
+app.use(cors());
 
 app.use(bodyParser.json());
 
