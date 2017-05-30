@@ -1,88 +1,83 @@
-## Northcoders News API
+# NorthCodersNews API
 
-### Background
+This is a backend project which links up with north_coders_news. There are several endpoints which provide data when called on.
 
-We will be building the API which we used in the Northcoders News Sprint during the
-Front End block of the course. Your mongoose models and a Database seed file have been done for you.
+PLease find the endpoints [here](https://northcodersnewsapi.herokuapp.com/)
 
-Look closely at the response you get for each route on http://northcoders-news-api.herokuapp.com/ You will notice that we also send data such as the comment and vote count for each article. You will need to think carefully about how to do this in your API.
+You can find the deployed backend [here](https://rocky-earth-47954.herokuapp.com/api)
 
-You will need to get all your routes built up first as you can share the functionality between you `GET comments by id` route and the comment count on the articles response for example.
+## Getting Started
 
-### Mongoose Documentation
+To obtain a copy of this project you will need to follow the instructions below:
 
-The below are all model methods that you call on your models.
+-On the command line change into the directory you wish to clone the project
 
-* [find](http://mongoosejs.com/docs/api.html#model_Model.find)
-* [findOne](http://mongoosejs.com/docs/api.html#model_Model.findOne)
-* [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
-* [findOneAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findOneAndRemove)
-* [findById](http://mongoosejs.com/docs/api.html#model_Model.findById)
-* [findByIdAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate)
-* [findByIdAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove)
-* [update](http://mongoosejs.com/docs/api.html#model_Model.update)
+-Fork the project onto your github account 
 
-There are also some methods that can be called on the documents that get returned. These are:
+-Copy the HTTPS clone url 
 
-* [remove](http://mongoosejs.com/docs/api.html#model_Model-remove)
-* [save](http://mongoosejs.com/docs/api.html#model_Model-save)
-* [count](http://mongoosejs.com/docs/api.html#model_Model.count)
+-carry out the following commands:
 
-### Tasks
+    
+    git clone https://github.com/username/project-name.git
 
-1. Seed your database with the main seed file `$ node seed/seed.js`
-2. Build your express App
-3. Mount an API Router onto your app
-4. Define the routes described below
-5. Define controller functions for each of your routes
-6. Once you have all your routes start to tackle responding with the vote and comment counts on article requests like this http://northcoders-news-api.herokuapp.com/api/articles
-7. Test your api routes!
+    cd project/directory/where/project/is
+    
 
-### Routes
-```
-GET /api/topics
-```
-Get all the topics
+## Prerequisites
 
-```
-GET /api/topics/:topic_id/articles
-```
-Return all the articles for a certain topic
+### Node:
 
-```
-GET /api/articles
-```
-Returns all the articles
+Install Node according to the instructions on https://nodejs.org/en/
 
-```
-GET /api/articles/:article_id/comments
-```
-Get all the comments for a individual article
+run node -v to check if node is or has been installed
 
-```
-POST /api/articles/:article_id/comments
-```
-Add a new comment to an article. This route requires a JSON body with a comment key and value pair
-e.g: {"comment": "This is my new comment"}
+### NPM:
 
-```
-PUT /api/articles/:article_id
-```
-Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down'
-e.g: /api/articles/:article_id?vote=up
+Ensure that npm is fully updated, carry out the following command in your terminal:
 
-```
-PUT /api/comments/:comment_id
-```
-Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down'
-e.g: /api/comments/:comment_id?vote=down
+    npm install npm@latest -g
 
-```
-DELETE /api/comments/:comment_id
-```
-Deletes a comment
+run npm -v to see if node has been installed and what version you are running
 
-```
-GET /api/users/:username
-```
-Returns a JSON object with the profile data for the specified user.
+## Installing
+
+Once you have all the required software installed, go to the directory of the cloned project and run the following commmand:
+
+    npm install 
+
+This will install all the dependencies of the project
+
+To start the project on a localhost server run the following command
+
+    npm start
+
+To run this project locally please clone this repository,carry out in the root directory:
+
+   npm install 
+   
+Then make mongoDB available with mongod
+
+Seed the datebase:
+
+  node seed/seed.js 
+  
+Start and instance of the development server by running the following command:
+
+  npm start 
+  
+Now it should be available in your localhost:3000.
+
+## Running the tests
+
+To run all the automated tests for this project, all you have to do is the following command in the root directory:
+
+  npm test
+
+## Authors
+
+* **Richard Thompson** - *Initial work* - [Richard Thompson](https://github.com/Richard-Thompson)
+
+## Acknowledgments
+
+* A great thanks to NorthCoders who mentored me and assisted in my learning of javascript and its libraries/frameworks
