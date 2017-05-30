@@ -92,8 +92,6 @@ describe('API ROUTES', () => {
             request(ROOT)
                 .get(`/articles/${sampleIds.article_id}`)
                 .end((err, res) => {
-                    console.log(res.body)
-                    console.log(res.body[0])
                     if (err) throw err;
                     expect(res.statusCode).to.equal(200);
                     expect(res.body).to.be.an('array');
