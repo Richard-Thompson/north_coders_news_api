@@ -1,15 +1,15 @@
-var models = require('../models/models');
-var userData = require('./data/user_data.js');
-var articleData = require('./data/articles');
-var Chance = require('chance');
-var chance = new Chance();
-var _ = require('underscore');
-var async = require('async');
-var mongoose = require('mongoose');
-var log4js = require('log4js');
-var logger = log4js.getLogger();
-var moment = require('moment');
-var DBs = require('../config').DB;
+const models = require("../models/models");
+const userData = require("./data/user_data.js");
+const articleData = require("./data/articles");
+const Chance = require("chance");
+const chance = new Chance();
+const _ = require("underscore");
+const async = require("async");
+const mongoose = require("mongoose");
+const log4js = require("log4js");
+const logger = log4js.getLogger();
+const moment = require("moment");
+const DBs = require("../config").DB;
 
 mongoose.connect(DBs.dev, function (err) {
   if (!err) {
@@ -23,26 +23,26 @@ mongoose.connect(DBs.dev, function (err) {
       addNorthcoderUser
     ], function (err) {
       if (err) {
-        logger.error('ERROR SEEDING :O');
+        logger.error("ERROR SEEDING :O");
         console.log(JSON.stringify(err));
         process.exit();
       }
-      logger.info('DONE SEEDING!!');
+      logger.info("DONE SEEDING!!");
       process.exit();
     });
   } else {
-    logger.error('DB ERROR');
+    logger.error("DB ERROR");
     console.log(JSON.stringify(err));
     process.exit();
   }
 });
 
-function addNorthcoderUser(done) {
-  var userDoc = new models.Users(
+function addNorthcoderUser (done) {
+  const userDoc = new models.Users(
     {
-      username: 'northcoder',
-      name: 'Awesome Northcoder',
-      avatar_url: 'https://avatars3.githubusercontent.com/u/6791502?v=3&s=200'
+      username: "northcoder",
+      name: "Awesome Northcoder",
+      avatar_url: "https://avatars3.githubusercontent.com/u/6791502?v=3&s=200"
     }
   );
   userDoc.save(function (err) {
@@ -53,10 +53,10 @@ function addNorthcoderUser(done) {
   });
 }
 
-function addUsers(done) {
-  logger.info('adding users')
+function addUsers (done) {
+  logger.info("adding users");
   async.eachSeries(userData, function (user, cb) {
-    var userDoc = new models.Users(user);
+    const userDoc = new models.Users(user);
     userDoc.save(function (err) {
       if (err) {
         return cb(err);
@@ -65,19 +65,19 @@ function addUsers(done) {
     });
   }, function (error) {
     if (error) return done(error);
-    return done(null)
-  })
+    return done(null);
+  });
 }
 
-function addTopics(done) {
-  logger.info('adding topics')
-  var topicDocs = [];
-  async.eachSeries(['Football', 'Cooking', 'Coding'], function (topic, cb) {
-    var topicObj = {
+function addTopics (done) {
+  logger.info("adding topics");
+  const topicDocs = [];
+  async.eachSeries(["Football", "Cooking", "Coding"], function (topic, cb) {
+    const topicObj = {
       title: topic,
       slug: topic.toLowerCase()
     };
-    var topicDoc = new models.Topics(topicObj);
+    const topicDoc = new models.Topics(topicObj);
     topicDoc.save(function (err, doc) {
       if (err) {
         logger.error(JSON.stringify(err));
@@ -89,22 +89,22 @@ function addTopics(done) {
     });
   }, function (error) {
     if (error) return done(error);
-    return done(null, topicDocs)
-  })
+    return done(null, topicDocs);
+  });
 }
 
-function addArticles(topicDocs, done) {
-  logger.info('adding articles');
+function addArticles (topicDocs, done) {
+  logger.info("adding articles");
   // will be a big array of strings
-  var docIds = [];
+  const docIds = [];
   async.eachSeries(topicDocs, function (topic, cb) {
-    var articles = articleData[topic.slug];
+    const articles = articleData[topic.slug];
     async.eachSeries(userData, function (user, cbTwo) {
-      var usersArticle = articles[0];
+      const usersArticle = articles[0];
       usersArticle.created_by = user.username;
       usersArticle.belongs_to = topic.slug;
       usersArticle.votes = _.sample(_.range(2, 11));
-      var usersArticleDoc = new models.Articles(usersArticle);
+      const usersArticleDoc = new models.Articles(usersArticle);
       usersArticleDoc.save(function (err, doc) {
         if (err) {
           logger.error(JSON.stringify(err));
@@ -112,11 +112,11 @@ function addArticles(topicDocs, done) {
         }
         articles.shift();
         docIds.push(doc._id);
-        var usersArticleTwo = articles[0];
+        const usersArticleTwo = articles[0];
         usersArticleTwo.created_by = user.username;
         usersArticleTwo.belongs_to = topic.slug;
         usersArticleTwo.votes = _.sample(_.range(2, 11));
-        var usersArticleTwoDoc = new models.Articles(usersArticleTwo);
+        const usersArticleTwoDoc = new models.Articles(usersArticleTwo);
         usersArticleTwoDoc.save(function (err, doc2) {
           if (err) {
             logger.error(JSON.stringify(err));
@@ -130,48 +130,48 @@ function addArticles(topicDocs, done) {
     }, function (error) {
       if (error) return cb(error);
       return cb(null, docIds);
-    })
+    });
 
   }, function (error) {
     if (error) return done(error);
-    return done(null, docIds)
-  })
+    return done(null, docIds);
+  });
 }
 
-function addComments(docIds, done) {
-  logger.info('adding comments');
+function addComments (docIds, done) {
+  logger.info("adding comments");
   async.eachSeries(docIds, function (id, cb) {
     async.eachSeries(_.range(_.sample(_.range(5, 11))), function (x, cbTwo) {
-      var comment = {
+      const comment = {
         body: chance.paragraph({sentences: _.sample(_.range(2, 5))}),
         belongs_to: id,
         created_by: userData[_.sample(_.range(6))].username,
         votes: _.sample(_.range(2, 11)),
         created_at: getRandomStamp()
       };
-      var commentDoc = new models.Comments(comment);
+      const commentDoc = new models.Comments(comment);
       commentDoc.save(function (err) {
         if (err) {
-          return cb(err)
+          return cb(err);
         }
         return cbTwo();
-      })
+      });
     }, function (error) {
       if (error) return done(error);
       return cb();
-    })
+    });
 
   }, function (err) {
     if (err) return done(err);
-    return done()
+    return done();
   });
 }
 
-function getRandomStamp() {
+function getRandomStamp () {
   return new Date (
-    moment().subtract(_.sample(_.range(1,7)), 'days')
-    .subtract(_.sample(_.range(1,24)), 'hours')
-    .subtract(_.sample(_.range(1,60)), 'minutes')
+    moment().subtract(_.sample(_.range(1,7)), "days")
+    .subtract(_.sample(_.range(1,24)), "hours")
+    .subtract(_.sample(_.range(1,60)), "minutes")
     .format()
-  ).getTime()
+  ).getTime();
 }

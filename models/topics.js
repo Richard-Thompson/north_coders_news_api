@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var TopicSchema = new Schema({
+const TopicSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -13,4 +13,4 @@ var TopicSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('topics', TopicSchema);
+module.exports = mongoose.model("topics", TopicSchema);
