@@ -1,8 +1,8 @@
-const topics = require('../models/topics');
-const articles = require('../models/articles');
-const comments = require('../models/comments');
-const mongoose = require('mongoose');
-const async = require('async');
+const topics = require("../models/topics");
+const articles = require("../models/articles");
+const comments = require("../models/comments");
+const mongoose = require("mongoose");
+const async = require("async");
 
 function getAllTopics (req, res) {
     topics.find({}, function (err, topics) {
@@ -14,9 +14,10 @@ function getAllTopics (req, res) {
 
 }
 
-function getTopicArticles (req, res, next) {
+function getTopicArticles (req, res) {
     articles.find({belongs_to: req.params.topic_id}, function (err, articles) {
-        if (err) next(err);
+        if (articles.length === 0) return res.status(204).send({status: "NO CONTENT"});
+        if (err) return res.status(404).send({error:err});
         res.status(200).send({articles:articles});
     });
 
@@ -51,8 +52,10 @@ function getAllArticles (req, res, next) {
 }
 
 function getArticle (req, res, next) {
+    if (req.params.article_id.length !== 24) return res.status(400).send({status:"BAD REQUEST"});
     let id = mongoose.Types.ObjectId(req.params.article_id);
     articles.find({_id:id}, function (err, article) {
+       if (article.length === 0) return res.status(204).send({status: "NO CONTENT"});
        if (err) next(err);
         res.status(200).send(article);
     });
@@ -60,13 +63,16 @@ function getArticle (req, res, next) {
    
 
 function getArticleComments (req, res, next) {
-    comments.find({belongs_to:req.params.article_id}, function (err, comments) {
-        if (err) return next(err);
-        res.status(200).send({comments:comments});
+     if (req.params.article_id.length !== 24) return res.status(400).send({status:"BAD REQUEST"});
+     comments.find({belongs_to:req.params.article_id}, function (err, comments) {
+         if (comments.length === 0) return res.status(204).send({status: "NO CONTENT"});
+         if (err) next(err);
+         res.status(200).send({comments:comments});
     });
 }
 
 function addArticleComment (req, res, next) {
+    if (!req.body.comment) return res.status(400).send({status: "BAD REQUEST"});
     let comment = new comments({belongs_to: req.params.article_id, body:req.body.comment});
      comment.save(function (err) {
         if (err) return next(err);
@@ -76,8 +82,9 @@ function addArticleComment (req, res, next) {
 
 function articleVote (req, res, next) {
     let id = mongoose.Types.ObjectId(req.params.article_id), vote = req.query.vote, voteIncrement = 0;
-    if (vote === 'up') voteIncrement = 1;
-    if (vote === 'down') voteIncrement = -1;
+    if (vote !== "up" && vote !== "down") return res.status(400).send({status: "BAD REQUEST"});
+    if (vote === "up") voteIncrement = 1;
+    if (vote === "down") voteIncrement = -1;
     articles.update({_id:id},{$inc:{votes: voteIncrement}}, function (err) {
         if (err) return next(err);
 
@@ -97,8 +104,9 @@ function removeComment (req, res, next) {
 
 function commentVote (req, res, next) {
     let id = mongoose.Types.ObjectId(req.params.comment_id), vote = req.query.vote, voteIncrement = 0;
-    if (vote === 'up') voteIncrement = 1;
-    if (vote === 'down') voteIncrement = -1;
+    if (vote !== "up" && vote !== "down") return res.status(400).send({status: "BAD REQUEST"});
+    if (vote === "up") voteIncrement = 1;
+    if (vote === "down") voteIncrement = -1;
     comments.update({_id:id},{$inc:{votes: voteIncrement}}, function (err) {
         if (err) return next(err);
 
