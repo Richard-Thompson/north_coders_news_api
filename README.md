@@ -12,16 +12,14 @@ To obtain a copy of this project you will need to follow the instructions below:
 
 -On the command line change into the directory you wish to clone the project
 
--Fork the project onto your github account 
-
 -Copy the HTTPS clone url 
 
 -carry out the following commands:
 
     
-    git clone https://github.com/username/project-name.git
+    git clone https://github.com/Richard-Thompson/north_coders_news_api.git
 
-    cd project/directory/where/project/is
+    cd north_coders_news_api
     
 
 ## Prerequisites
@@ -73,6 +71,12 @@ Now it should be available in your localhost:3000.
 To run all the automated tests for this project, all you have to do is the following command in the root directory:
 
   npm test
+
+## Built With
+* [node](https://nodejs.org/en/) - Javascript runtime build
+* [npm](https://www.npmjs.com/) - Javascript package manager
+* [express](https://expressjs.com/) - Web framework for node.js
+* [Mongoose](http://mongoosejs.com/docs/) -  mongodb object modeling for node.js
 
 ## Authors
 
